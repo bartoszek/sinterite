@@ -32,7 +32,10 @@
   videoContainer.addEventListener( "mousemove", trackLocation, false);
   videoContainer.addEventListener("touchstart",trackLocation,false);
   videoContainer.addEventListener("touchmove",trackLocation,false);
-  document.querySelectorAll('video').playbackRate = .5;
+  for(var ell in document.querySelectorAll('video')){
+    ell.playbackRate = .5;
+  }
+
   </script>
 </body>
 
