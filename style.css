@@ -12,7 +12,7 @@ body {
 #video-compare-container > video {
   width: 100%;
   position: absolute;
-  top: 0; height: 540;
+  top: 0; height: 100%;
 }
 #video-clipper {
   width: 50%; position: absolute;
@@ -22,5 +22,5 @@ body {
 #video-clipper video {
   width: 200%;
   postion: absolute;
-  height: 540;
+  height: 100%;
 }
