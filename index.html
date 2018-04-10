@@ -29,11 +29,11 @@
   var videoContainer = document.getElementById("video-compare-container"),
   videoClipper = document.getElementById("video-clipper"),
   clippedVideo = videoClipper.getElementsByTagName("video")[0];
+  document.querySelectorAll('video')[0].playbackRate = .75;
+  document.querySelectorAll('video')[1].playbackRate = .75;
   videoContainer.addEventListener( "mousemove", trackLocation, false);
   videoContainer.addEventListener("touchstart",trackLocation,false);
   videoContainer.addEventListener("touchmove",trackLocation,false);
-  document.querySelectorAll('video')[0].playbackRate = .75;
-  document.querySelectorAll('video')[1].playbackRate = .75;
   }
 
   </script>
