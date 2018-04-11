@@ -7,35 +7,80 @@
 
 <body>
   <div id="video-compare-container">
-    <video loop autoplay poster="https://bartoszek.github.io/sinterite/v1.png">
+    <video loop id="vid1" oncanplay="readyVidInterlace();" poster="https://bartoszek.github.io/sinterite/v1.png">
     <source src=https://bartoszek.github.io/sinterite/s1_i3_v1.mp4>
     <source src=https://bartoszek.github.io/sinterite/s1_i3_v1.webm>
   </video>
     <div id="video-clipper">
-      <video loop autoplay poster="https://bartoszek.github.io/sinterite/v2.png">
+      <video loop id="vid1" oncanplay="readyVidInterlace();" poster="https://bartoszek.github.io/sinterite/v2.png">
       <source src=https://bartoszek.github.io/sinterite/s1_i3_v2.mp4>
       <source src=https://bartoszek.github.io/sinterite/s1_i3_v2.webm>
     </video>
     </div>
   </div>
   <script>
-  function trackLocation(e) {
-    var rect = videoContainer.getBoundingClientRect(),
-        position = ((e.pageX - rect.left) / videoContainer.offsetWidth)*100;
-    if (position <= 100) {
-      videoClipper.style.width = position+"%";
-      clippedVideo.style.width = ((100/position)*100)+"%";
-      clippedVideo.style.zIndex = 3;
-  	}
-  }
-  var videoContainer = document.getElementById("video-compare-container"),
-  videoClipper = document.getElementById("video-clipper"),
-  clippedVideo = videoClipper.getElementsByTagName("video")[0];
-  videoContainer.addEventListener( "mousemove", trackLocation, false);
-  videoContainer.addEventListener("touchstart",trackLocation,false);
-  videoContainer.addEventListener("touchmove",trackLocation,false);
-  document.querySelectorAll('video')[0].playbackRate = .75;
-  document.querySelectorAll('video')[1].playbackRate = .75;
+    function trackLocation(e) {
+      var rect = videoContainer.getBoundingClientRect(),
+        position = ((e.pageX - rect.left) / videoContainer.offsetWidth) * 100;
+      if (position <= 100) {
+        videoClipper.style.width = position + "%";
+        clippedVideo.style.width = ((100 / position) * 100) + "%";
+        clippedVideo.style.zIndex = 3;
+      }
+    }
+    var videoContainer = document.getElementById("video-compare-container"),
+      videoClipper = document.getElementById("video-clipper"),
+      clippedVideo = videoClipper.getElementsByTagName("video")[0];
+    videoContainer.addEventListener("mousemove", trackLocation, false);
+    videoContainer.addEventListener("touchstart", trackLocation, false);
+    videoContainer.addEventListener("touchmove", trackLocation, false);
+    vid1 = document.getElementById('vid1');
+    vid2 = document.getElementById('vid2');
+    vid1.playbackRate = .75;
+    vid2.playbackRate = .75;
+    fps = 24, duration, totalFrames, frameClock;
+
+    function readyVidInterlace() {
+      if ((vid1.readyState >= 3) && (vid2.readyState >= 3)) {
+        startVideoInterlace();
+      }
+    }
+
+    function startVideoInterlace() {
+      vid1.play();
+      vid2.play();
+      vidDeviationControl();
+    }
+
+    function vidDeviationControl() {
+
+      if (Math.abs(vid1.currentTime - vid2.currentTime) > 0.05) {
+        cancelAnimationFrame(vidDeviationControl);
+
+        vid1.pause();
+        vid2.pause();
+
+        // set all 3 before new AnimationFrame is drawn.
+        vid1.currentTime = vid2.currentTime;
+        vid2.currentTime = vid1.currentTime;
+
+        vid1.play();
+        vid2.play();
+
+      }
+
+      if (vid1.paused || vid1.ended) {
+        cancelAnimationFrame(vidDeviationControl);
+        return;
+      } else {
+        requestAnimationFrame(vidDeviationControl);
+      }
+    }
+
+    function stopVideoInterlace() {
+      vid1.pause();
+      vid2.pause();
+    }
   </script>
 </body>
 
